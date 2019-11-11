@@ -1,30 +1,3 @@
-######################################################
-#Elaborado por: Fabrizio Ferreto y Crystel Montero
-#Fecha de creación: 27/04/2019
-#Última modificación: 13/05/2019 1:00pm
-#Versión: 3.5.2
-#######################################################
-#Importación de librerías
-#Interfaz gráfica
-from tkinter import*
-from tkinter import ttk as t
-from tkinter import messagebox as MS
-#Api
-import requests
-#XML
-import xml.etree.ElementTree as ET
-import codecs
-from xml.dom import minidom
-#Correo
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.base import MIMEBase
-from email import encoders
-import time
-#Manual de usuario
-import webbrowser
-#Definición de funciones
-#Matriz y diccionario
 def agregarFraseMatriz(matriz,numapli):
     """
     Función: agrega las frases, separando las partes que obtiene del API a una matriz.
