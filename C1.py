@@ -1,16 +1,11 @@
 def agregarFraseMatriz(matriz,numapli):
-    """
-    Función: agrega las frases, separando las partes que obtiene del API a una matriz.
-    Entradas: una matriz vacía y el número de aplicación.
-    Salidas: las frases separadas con el formato de "Personaje-frase-id-codigoAplicacion". Para insertar
-    en el listbox
-    """
+
     listanue=[]
     listafra=[]
     listanueid=[]
     i=0
-    url=requests.get("http://swquotesapi.digitaljedi.dk/api/SWQuote/RandomStarWarsQuote") #API.
-    resp=dict(eval(url.text)) #Resp: el diccionario que devuelve el api.
+    url=requests.get("http://swquotesapi.digitaljedi.dk/api/SWQuote/RandomStarWarsQuote") 
+    resp=dict(eval(url.text))
     conver=str(resp["starWarsQuote"])
     conver=conver.replace(" - "," — ")
     conver=conver.replace(" ? "," — ")
@@ -48,20 +43,14 @@ def agregarFraseMatriz(matriz,numapli):
     mF.insert(END, frase[1]+" "+frase[0]+" id:"+str(resp["id"])+" codigo:"+str(codapli))
     return ""
 def agregarFraseDicc(matriz, dicc):
-    """
-    Función: agrega el personaje, la cantidad de frases que le salen(contando las repetidas)
-    y el código de aplicación. También determina quien es el personaje con más frases. 
-    Entradas: la matriz y un diccionario vacío.
-    Salidas: el diccionario ya formado.
-    """
+
     i=0
     lisNum=[]
     while i<len(matriz):
         dicc[matriz[i][0]]=int(len(matriz[i][-1])), matriz[i][-2]
         i+=1
-        diccFra=dicc #Asignar el diccionario que se forma dentro de la función a la variable global del diccionario.
-    matrizFra=matriz #Asigna la matriz que se formó anteriormente a una variable global de la matriz.
-    #Personaje con más frases.
+        diccFra=dicc 
+    matrizFra=matriz 
     for i in dicc:
         num=int(dicc[i][0])
         lisNum.append(num)
@@ -75,13 +64,7 @@ def agregarFraseDicc(matriz, dicc):
     mayor.place(x=650, y=200)
     return dicc    
 def contarFrase(matriz, numaplica, dicc):
-    """
-    Función: ejecuta las funciones anteriores basada en la variable canti, que sería la cantidad de veces
-    que debe ejecutarse el programa para encontrar es cantidad de frases. 
-    Entradas: la matriz, el número de aplicación y el diccionario.
-    Salidas: N/A
-    Restricciones: la cantidad de frases no puede ser mayor a 50, y deben ser número enteros mayores a 0.
-    """
+
     try:
         canti=int(cantEnt.get())
         if canti>50:
@@ -100,13 +83,8 @@ def contarFrase(matriz, numaplica, dicc):
     except ValueError:
         MS.showerror(message="Debe ingresar una cantidad de frases válida para ejecutar el programa.", title="Cantidad inválida.")
 
-#XML
 def leerXml(matrizfin,diccfin):
-    """
-    Función: cargar el archivo de respaldo en el cuadro del listBox cuando se abra la aplicación.
-    Entradas: matriz y diccionario.
-    Salidas: la matriz.
-    """
+
     cont=0
     with codecs.open('Backup_StarWars.xml',"r", encoding="latin 1") as xml:
         tree=ET.parse(xml)
@@ -151,12 +129,7 @@ def leerXml(matrizfin,diccfin):
                 linea.append(listest)
     return matrizfin
 def escribirXml(matriz,dicc):
-    """
-    Función: hace el archivo XML en base a la matriz y el diccionario. Solo se ejecuta cuando el usuario
-    desee realizar un back up.
-    Entradas: la matriz y el diccionario.
-    Salidas: N/A
-    """
+
     print(matriz)
     mat=0
     diccion=0
@@ -182,21 +155,12 @@ def escribirXml(matriz,dicc):
         file.write(xml)
     return ""
 def prettify(elem):
-    """
-    Función: ordenar el XML de una forma más entendible para el usuario.
-    Entradas: elem
-    Salidas: elem reparseado de manera legible. 
-    """
+
     rough_string = ET.tostring(elem, 'utf-8')
     reparsed = minidom.parseString(rough_string)
     return reparsed.toprettyxml(indent=" ")
 def mostrarXML(matrizfin,diccfin):
-    """
-    Función: muestra las frases del XML del backUp por separado, no todas en una sola línea como la matriz
-    completa.    
-    Entradas: matriz y diccionario.
-    Salidas: N/A
-    """
+
     matriz=leerXml(matrizfin,diccfin)
     cont=0
     while cont<=len(matrizfin)-1:
@@ -209,42 +173,23 @@ def mostrarXML(matrizfin,diccfin):
             mF.insert(END, [str(matrizfin[cont][0])+str(matrizfin[cont][1])+" id:"+str(matrizfin[cont][2])+" codigo:"+str(matrizfin[cont][3])])
         cont+=1
     return ""    
-#Botones, interfaz gráfica
 def ejecutarBotonBuscarCant():
-    """
-    Función: ejecuta el programa después de presionar el botón.
-    Entradas:N/A
-    Salidas:N/A
-    Restricciones: debe haber conexión a internet para ejecutar el programa. 
-    """
+
     try:
         contarFrase(matrizFra, numapli, diccFra)
     except requests.exceptions.ConnectionError:
         MS.showerror(message="No se pudo establecer conexión a internet, intente conectarse a otra red."\
                      ,title="Fallo de conexión")
 def backUp():
-    """
-    Función: pregunta al usuario si desea realizar un archivo de respaldo.
-    Entradas:N/A
-    Salidas: N/A
-    """
+
     def ejecutarSi():
-        """
-        Función: Realiza un archivo de tipo XML para guardar todas las frases que se ejecuten
-        en la aplicación. Además cierra la aplicación
-        Entradas: N/A
-        Salidas: N/A
-        """
+
         escribirXml(matrizFra,diccFra)
         MS.showinfo(message="Se creó el archivo Backup_StarWars.xml", title="BackUp")
         ven.destroy()
         venPrin.destroy()
     def ejecutarNo():
-        """
-        Función: No realiza el respaldo y cierra la aplicación. 
-        Entradas: N/A
-        Salidas: N/A
-        """
+
         MS.showinfo(message="¡Gracias por usar la aplicación!, vuelva pronto.", title="Cierre")
         ven.destroy()
         venPrin.destroy()
@@ -261,19 +206,11 @@ def backUp():
     no.place(x=250, y=30)
     ven.mainloop()
 def compartir():
-    """
-    Función: comparte las frases seleccionadas por el usuario por medio de correo electrónico.
-    Entradas: N/A
-    Salidas: N/A
-    """
+
     MS.showinfo(message="Solo se pueden enviar correos de una cuenta gmail a cualquier otra.",\
                 title="Info")
     def seleccionarFrases():
-        """
-        Función: toma las frases seleccionadas por el usuario y las agrega a una lista.
-        Entradas: N/A
-        Salidas: llamar a la aplicación de escribir correo. 
-        """
+
         lisEnviar=[]
         lisFrase=mF.curselection()
         for item in lisFrase:
@@ -282,11 +219,7 @@ def compartir():
             lisEnviar.append(frase)
         MS.showinfo(message="Agregados al archivo para compartir.", title="Información.")
         def escribirCorreo(lisEnviar):
-            """
-            Función: escribe el archivo XML que contiene las frases seleccionadas por el usuario.
-            Entradas: la lista de frases que se creó en la función anterior.
-            Salidas: N/A
-            """
+ 
             raiz=ET.Element("FrasesCompartidas")
             for i in lisEnviar:
                fra=ET.SubElement(raiz,"frase",frases=i)
@@ -299,12 +232,7 @@ def compartir():
             return ""
         return escribirCorreo(lisEnviar)
     def enviarCorreo():
-        """
-        Función: envía un correo con el XML que tiene las frases seleccionadas por el usuario.
-        Entradas: el correo, la contraseña y el destinatario, se toman directamente de los widgets de
-        Entry que se encuentran en el programa principal.
-        Salidas: N/A
-        """
+
         try:
             print(seleccionarFrases())
             mensaje=MIMEMultipart()
@@ -329,7 +257,6 @@ def compartir():
             MS.showerror(message="Ingrese valores válidos en los espacios de correo, contraseña y destinatario.")
     horaYfecha=str(time.strftime("%d_%m_%Y")+"."+time.strftime("%I_%M_%S"))
     nombreArchComp="share"+"_"+horaYfecha+".xml"
-    #Ventana de enviar correo.
     win=Tk()
     win.title("Compartir")
     win.config(bg="Azure2")
@@ -353,20 +280,13 @@ def compartir():
     enviar=t.Button(win, text="Enviar", command=enviarCorreo)
     enviar.grid(row=3, column=1)
     win.mainloop()
-#Nota aclaratoria: en esta función hay varias funciones dentro ya que la idea es que el archivo se cree
-#y se envíe al mismo tiempo por cuestiones del nombre.
+
 def abrirManual():
-    """
-    Función: abre el pdf del manual de usuario.
-    Entradas: N/A
-    Salidas: N/A
-    """
+
     webbrowser.open("https://drive.google.com/file/d/16vhTSufcJuNOvUpKuqytR4eG6xnOB_PK/view?usp=drive_open")
-#Variables globales
 matrizFra=[]
 diccFra={}
 numapli=len(matrizFra)
-#Ventana principal
 venPrin=Tk()
 venPrin.title("Frases StarWars")
 venPrin.geometry("1000x500")
@@ -377,14 +297,12 @@ frases=Label(venPrin, text="FRASES ALEATORIAS")
 frases.config(bg="Light Blue")
 frases.config(font=("STARWARS", 12))
 frases.grid(row=0, column=0, padx=10, pady=10)
-#ListBox donde se van a mostrar las frases
 mF=Listbox(venPrin, selectmode=MULTIPLE, width=100, height=20)
 mF.grid(row=1, column=0, padx=10, pady=10)
 barrav=Scrollbar(venPrin, command=mF.yview)
 barrav.grid(row=1,column=0, sticky="nsew")
 mF.config(yscrollcommand=barrav.set)
 instr=Label(venPrin, text="Selecciona las frases que desea enviar por correo")
-#Buscar la cantidad de frases
 cant=Label(venPrin, text="Cantidad de frases")
 cant.config(bg="Light Blue")
 cant.config(font=("Star Jedi Outline", 10))
@@ -393,15 +311,11 @@ cantEnt=t.Entry(venPrin)
 cantEnt.grid(row=0, column=2)
 cantBot=t.Button(venPrin, text="Buscar", command=ejecutarBotonBuscarCant)
 cantBot.place(x=810, y=40)
-#Botón manual de usuario
 manualUsuario=t.Button(venPrin, text="Manual de Usuario", command=abrirManual)
 manualUsuario.place(x=500, y=400)
-#Compartir 
 shareBot=t.Button(venPrin, text="Compartir", command=compartir)
 shareBot.place(x=350, y=400)
-#Botón de cerrar
 venPrin.protocol('WM_DELETE_WINDOW', backUp)
-#Imágenes
 ima1=PhotoImage(file="YODA.png")
 ima1=ima1.subsample(5,5)
 eti=Label(venPrin, image=ima1)
@@ -412,16 +326,10 @@ ima2=ima2.subsample(5,5)
 eti2=Label(venPrin, image=ima2)
 eti2.config(bg="Light Blue")
 eti2.place(x=800, y=110)
-#Leer XML al abrir la aplicación
-"""
-Esta parte lee el xml del backUp al abrir la aplicación.
-Tiene una validación sobre sino existe el archivo que no lea nada. 
-"""
+
 try:
     mostrarXML(matrizFra,diccFra)
 except FileNotFoundError:
     None 
-venPrin.mainloop() #Esta función es de la interfaz, lo que hace es que mantiene todas las líneas de código
-                   #antes de esa ejecutándose. 
-
+venPrin.mainloop()
 
